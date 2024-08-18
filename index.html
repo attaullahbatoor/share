@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculate Shares</title>
+    <style>
+        body {
+            font-family: 'Calibiri', sans-serif;
+            background-color: #514caf;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            /* Removed animation */
+        }
+
+        h1 {
+            font-size: 26px;
+            color: #09101e;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-size: 17px;
+            margin-bottom: 10px;
+            color: #120808;
+            display: block;
+            text-align: left;
+            font-weight: bold;
+            word-spacing: normal;
+        }
+
+        input[type="number"] {
+            padding: 12px;
+            width: 100%;
+            box-sizing: border-box;
+            border-radius: 5px;
+            border: 1px solid #514caf;
+            margin-bottom: 20px;
+            transition: border-color 0.3s ease, transform 0.3s ease;
+        }
+
+        input[type="number"]:focus {
+            border-color: #4CAF50;
+            outline: none;
+            transform: scale(1.05);
+        }
+
+        input[type="submit"],
+        input[type="reset"] {
+            background-color: #514caf;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #2bb832;
+            transform: scale(1.05);
+        }
+
+        input[type="reset"]:hover {
+            background-color: #f03030;
+            transform: scale(1.05);
+        }
+
+        #results {
+            background-color: #d6d5d5;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            margin-top: 20px;
+            /* Removed animation */
+        }
+
+        #results h2 {
+            margin-top: 0;
+            font-size: 20px;
+            color: #333;
+            border-bottom: 2px solid #514caf;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        #results p {
+            font-size: 16px;
+            margin: 10px 0;
+            line-height: 1.5;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #120808;
+            padding-bottom: 10px;
+        }
+
+        #results p:last-child {
+            border-bottom: none;
+        }
+
+        #results span {
+            font-weight: bold;
+            color: #f03030;
+        }
+
+        /* Media Query for Mobile Devices */
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px;
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 22px;
+                margin-bottom: 20px;
+            }
+
+            label {
+                font-size: 16px;
+            }
+
+            input[type="submit"],
+            input[type="reset"] {
+                padding: 10px;
+                font-size: 15px;
+                margin-bottom: 10px;
+            }
+
+            #results h2 {
+                font-size: 18px;
+            }
+
+            #results p {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Calculate Shares from Received Money</h1>
+        <form id="shareForm">
+            <label for="received_Money">Enter the amount received:</label>
+            <input type="number" id="received_Money" name="received_Money" min="0.01" step="0.01" required>
+            <p id="warningMessage" style="color: #821313; font-size: 14px; text-align: left; margin-top: -13px; display: none;">
+                Please enter a value greater than zero.
+            </p>
+            <input type="submit" value="Calculate">
+            <input type="reset" value="Reset">
+        </form>
+
+        <div id="results"></div>
+    </div>
+
+    <script>
+        document.getElementById('shareForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            let received_Money = parseFloat(document.getElementById('received_Money').value);
+            let warningMessage = document.getElementById('warningMessage');
+
+            if (isNaN(received_Money) || received_Money <= 0) {
+                warningMessage.style.display = 'block';
+                return;
+            } else {
+                warningMessage.style.display = 'none';
+            }
+
+            let shares = {
+                "Mujibullah Sulimankhail": (received_Money / 100) * 26.615,
+                "Attaullah Batoor": (received_Money / 100) * 18.142,
+                "Khalilullah Batoor": (received_Money / 100) * 18.142
+            };
+
+            let resultDiv = document.getElementById('results');
+            resultDiv.innerHTML = `
+                <h2>Calculation Results:</h2>
+                ${Object.entries(shares).map(([name, share]) => `
+                    <p>${name}: <span>${share.toFixed(2)} AFN</span> (${(share / received_Money * 100).toFixed(3)}%)</p>
+                `).join('')}
+            `;
+        });
+    </script>
+</body>
+
+</html>
